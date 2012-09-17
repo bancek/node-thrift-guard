@@ -1,0 +1,25 @@
+{
+  "name": "thrift-guard",
+  "description": "Connection guard for node-thrift",
+  "homepage": "https://github.com/bancek/node-thrift-guard",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bancek/node-thrift-guard.git"
+  },
+  "version": "0.1.0",
+  "author": {
+    "name": "Luka Zakrajsek",
+    "email": "luka@bancek.net"
+  },
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "main": "./index.js",
+  "dependencies": {
+    "thrift": ">=0.7.0",
+    "thrift-utf8": "~0.1.0"
+  }
+}

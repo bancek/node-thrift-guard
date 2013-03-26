@@ -1,5 +1,4 @@
 var thrift = require('thrift');
-require('thrift-utf8');
 
 var guard = function (host, port, cls, ttypes) {
     "use strict";

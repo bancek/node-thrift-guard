@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git://github.com/bancek/node-thrift-guard.git"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Luka Zakrajsek",
     "email": "luka@bancek.net"
@@ -19,7 +19,6 @@
   ],
   "main": "./index.js",
   "dependencies": {
-    "thrift": ">=0.7.0",
-    "thrift-utf8": "~0.1.0"
+    "thrift": "git://github.com/bancek/node-thrift.git"
   }
 }

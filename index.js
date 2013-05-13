@@ -3,43 +3,54 @@ var thrift = require('thrift');
 var guard = function (host, port, cls, ttypes) {
     "use strict";
 
-    var client = null, getClient, proxy, addToProxy, name, methods;
+    var getClient, proxy, addToProxy, name, methods;
+
+    proxy = {};
+    proxy.client = null;
 
     getClient = function () {
-        if (client !== null) {
-            return client;
+        if (proxy.client) {
+            return proxy.client;
         }
 
         var connection = thrift.createConnection(host, port);
 
         connection.on('error', function (err) {
-            if (client !== null) {
-                client.handleErrors(err);
+            if (proxy.client) {
+                proxy.client.handleErrors(err);
             }
-            client = null;
+
+            proxy.client = null;
+
             console.warn("Thrift error: " + host + ":" + port, err);
         });
 
         connection.on('close', function (err) {
-            if (client !== null) {
-                client.handleErrors(err);
+            if (proxy.client) {
+                proxy.client.handleErrors(err);
             }
-            client = null;
-            console.warn("Thrift close: " + host + ":" + port, err);
+
+            proxy.client = null;
         });
 
         connection.on('timeout', function (err) {
-            if (client !== null) {
-                client.handleErrors(err);
+            if (proxy.client) {
+                proxy.client.handleErrors(err);
             }
-            client = null;
+
+            proxy.client = null;
+
             console.warn("Thrift timeout: " + host + ":" + port, err);
         });
 
-        client = thrift.createClient(cls, connection);
+        proxy.client = thrift.createClient(cls, connection);
 
-        client.handleErrors = function (err) {
-            var reqs = client._reqs, id, cb;
+        proxy.client.connection = connection;
+
+        proxy.client.handleErrors = function (err) {
+            var id, reqs, cb;
+
+            reqs = proxy.client._reqs;
 
             for (id in reqs) {
                 if (reqs.hasOwnProperty(id)) {
@@ -50,10 +61,8 @@ var guard = function (host, port, cls, ttypes) {
             }
         };
 
-        return client;
+        return proxy.client;
     };
-
-    proxy = {};
 
     addToProxy = function (name, value) {
         if (name.indexOf('send_') === -1 && name.indexOf('recv_') === -1) {
@@ -79,6 +88,13 @@ var guard = function (host, port, cls, ttypes) {
             proxy[name] = ttypes[name];
         }
     }
+
+    proxy.close = function () {
+        if (proxy.client) {
+            proxy.client.connection.connection.destroy();
+            delete proxy.client;
+        }
+    };
 
     return proxy;
 };

@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git://github.com/bancek/node-thrift-guard.git"
   },
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": {
     "name": "Luka Zakrajsek",
     "email": "luka@bancek.net"
@@ -17,8 +17,20 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0"
     }
   ],
-  "main": "./index.js",
+  "main": "lib/index.js",
   "dependencies": {
-    "thrift": "git://github.com/bancek/node-thrift.git"
+    "thrift": "git://github.com/bancek/node-thrift.git",
+    "generic-pool": "~2.0.4",
+    "lodash": "*"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.6.3",
+    "file": "~0.2.1",
+    "chai": "~1.8.1",
+    "mocha": "~1.13.0"
+  },
+  "scripts": {
+    "prepublish": "cake build",
+    "test": "cake test"
   }
 }
